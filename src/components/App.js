@@ -70,7 +70,7 @@ const App = () => {
   };
   return (
     <div id="main">
-      {!isError ? <div>{Errormsg}</div> : <div>Hello +{username}</div>}
+      {!isError ? <div>{Errormsg}</div> : <div>Hello {username}</div>}
       <label>Name:</label>
       <input data-testid="name" name="name" onChange={handleChange} />
       <label>email:</label>
