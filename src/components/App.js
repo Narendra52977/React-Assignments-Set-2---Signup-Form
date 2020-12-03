@@ -5,13 +5,13 @@ const App = () => {
   const [input, setInput] = useState({
     name: "",
     email: "",
-    gender: "",
+    gender: "male",
     phoneno: "",
     pwd: ""
   });
   const [isError, setIsError] = useState(false);
   const [username, setUser] = useState("");
-  const [Errormsg, setErrormsg] = useState("dgdfhdfhdfhbn");
+  const [Errormsg, setErrormsg] = useState("");
   const handleChange = (event) => {
     let inputCopy = { ...input };
     inputCopy[event.target.name] = event.target.value;
@@ -77,7 +77,12 @@ const App = () => {
       <input data-testid="email" name="email" onChange={handleChange} />
 
       <label>gender:</label>
-      <input data-testid="gender" name="gender" onChange={handleChange} />
+      <input
+        data-testid="gender"
+        name="gender"
+        value={input.gender}
+        onChange={handleChange}
+      />
 
       <label>phoneno:</label>
       <input data-testid="phoneNumber" name="phoneno" onChange={handleChange} />
