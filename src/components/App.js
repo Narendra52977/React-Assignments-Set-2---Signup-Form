@@ -65,12 +65,12 @@ const App = () => {
       setErrormsg("Password must contain atleast 6 letters");
       return;
     }
-    setIsError(true);
-    setUser(email.split("@")[0]);
+
+    setErrormsg("Hello " + email.split("@")[0]);
   };
   return (
     <div id="main">
-      {!isError ? <div>{Errormsg}</div> : <div>Hello {username}</div>}
+      <div>{Errormsg}</div>
       <label>Name:</label>
       <input data-testid="name" name="name" onChange={handleChange} />
       <label>email:</label>
