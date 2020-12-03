@@ -9,8 +9,7 @@ const App = () => {
     phoneno: "",
     pwd: ""
   });
-  const [isError, setIsError] = useState(false);
-  const [username, setUser] = useState("");
+
   const [Errormsg, setErrormsg] = useState("");
   const handleChange = (event) => {
     let inputCopy = { ...input };
