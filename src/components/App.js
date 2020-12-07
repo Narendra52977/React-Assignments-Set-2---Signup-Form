@@ -47,7 +47,7 @@ const App = () => {
       setErrormsg("Name is not alphanumeric");
       return;
     }
-    if (!email.includes("@")) {
+    if (email.indexOf("@")<1) {
       setErrormsg("Email must contain @");
       return;
     }
