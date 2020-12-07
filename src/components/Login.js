@@ -1,118 +1,143 @@
-import React, { Component, useState } from "react";
+import React from "react";
 import "../styles/App.css";
-export default class Login extends Component {
+
+export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: "",
       email: "",
       gender: "male",
-      phoneno: "",
-      pwd: "",
-      Errormsg: ""
+      phNo: "",
+      password: "",
+      errorMessage: "",
+      userName: ""
     };
   }
 
-  handleChange = (event) => {
-    let stateCopy = { ...this.state };
-
-    stateCopy[event.target.name] = event.target.value;
-    this.setState(stateCopy);
+  handleNameChange = (event) => {
+    this.setState({ name: event.target.value });
   };
-  handleClick = () => {
-    console.log(this.state);
-    let name = this.state.name;
-    let email = this.state.email;
-    let gender = this.state.gender;
-    let phoneno = this.state.phoneno;
-    let pwd = this.state.pwd;
-    //console.log(name, email, gender, phoneno, pwd);
-    if (!name || !email || !gender || !phoneno || !pwd) {
-      this.setState({ Errormsg: "All fields are mandatory" });
+
+  handleEmailChange = (event) => {
+    this.setState({ email: event.target.value });
+  };
+
+  handlePhoneNoChange = (event) => {
+    this.setState({ phNo: event.target.value });
+  };
+
+  handlePasswordChange = (event) => {
+    this.setState({ password: event.target.value });
+  };
+
+  handleChangeValue = (event) => {
+    this.setState({ gender: event.target.value });
+  };
+
+  handleSubmit = () => {
+    const alphanumeric = /^[0-9a-zA-Z ]+$/;
+    const numbers = /^\d+$/;
+    if (
+      this.state.name === "" ||
+      this.state.email === "" ||
+      this.state.phNo === "" ||
+      this.state.gender === "" ||
+      this.state.password === ""
+    ) {
+      this.setState({ errorMessage: "All fields are mandatory", userName: "" });
       return;
     }
-    let cnt1 = 0;
-    let cnt2 = 0;
-    for (let i = 0; i < name.length; i++) {
-      if (
-        (name[i] >= "a" && name[i] <= "z") ||
-        (name[i] >= "A" && name[i] <= "Z")
-      ) {
-        cnt1++;
-      } else if (Number(name[i]) >= 0 && Number(name[i]) <= 9) {
-        cnt2++;
-      }
-      if (cnt1 && cnt2) {
-        break;
-      }
-    }
-
-    if (!cnt1 || !cnt2) {
-      this.setState({ Errormsg: "Name is not alphanumeric" });
+    if (!this.state.name.match(alphanumeric)) {
+      this.setState({ errorMessage: "Name is not alphanumeric", userName: "" });
       return;
     }
     if (this.state.email.indexOf("@") < 1) {
-      this.setState({ Errormsg: "Email must contain @" });
-      return;
-    }
-    if (
-      this.state.gender !== "male" &&
-      this.state.gender !== "female" &&
-      this.state.gender !== "other"
-    ) {
-      this.setState({ Errormsg: "Please identify as male, female or others" });
-      return;
-    }
-    let pattern = /^[0-9]+$/;
-    if (!this.state.phoneno.match(pattern)) {
-      this.setState({ Errormsg: "Phone Number must contain only numbers" });
-      return;
-    }
-    if (this.state.pwd.length < 6) {
-      this.setState({ Errormsg: "Password must contain atleast 6 letters" });
+      this.setState({ errorMessage: "Email must contain @", userName: "" });
       return;
     }
 
+    if (!this.state.gender) {
+      this.setState({
+        errorMessage: "Please identify as male, female or others",
+        userName: ""
+      });
+      return;
+    }
+    if (!numbers.test(this.state.phNo)) {
+      this.setState({
+        errorMessage: "Phone Number must contain only numbers",
+        userName: ""
+      });
+      return;
+    }
+    if (this.state.password.length < 6) {
+      this.setState({
+        errorMessage: "Password must contain atleast 6 letters",
+        userName: ""
+      });
+      return;
+    }
+    const user = this.state.email.substring(0, this.state.email.indexOf("@"));
     this.setState({
-      Errormsg: "Hello " + email.substring(0, email.indexOf("@"))
+      userName: user,
+      errorMessage: "",
+      name: "",
+      email: "",
+      gender: "male",
+      phNo: "",
+      password: ""
     });
   };
+
   render() {
     return (
-      <div>
-        <div>{this.state.Errormsg}</div>
-        <label>Name:</label>
-        <input data-testid="name" name="name" onChange={this.handleChange} />
-        <label>email:</label>
-        <input data-testid="email" name="email" onChange={this.handleChange} />
-
-        <label>gender:</label>
+      <>
+        {this.state.errorMessage && <div>{this.state.errorMessage}</div>}
+        {this.state.userName && <div>Hello {this.state.userName}</div>}
+        <input
+          data-testid="name"
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={this.state.name}
+          onChange={this.handleNameChange}
+        />
+        <input
+          data-testid="email"
+          type="text"
+          name="email"
+          placeholder="Email"
+          value={this.state.email}
+          onChange={this.handleEmailChange}
+        />
         <input
           data-testid="gender"
+          type="text"
           name="gender"
           value={this.state.gender}
-          onChange={this.handleChange}
+          onChange={this.handleChangeValue}
         />
-
-        <label>phoneno:</label>
         <input
           data-testid="phoneNumber"
-          name="phoneno"
-          onChange={this.handleChange}
+          type="text"
+          name="phoneNumber"
+          placeholder="Phone Number"
+          value={this.state.phNo}
+          onChange={this.handlePhoneNoChange}
         />
-
-        <label>password:</label>
         <input
           data-testid="password"
           type="password"
-          name="pwd"
-          onChange={this.handleChange}
+          name="password"
+          placeholder="Password"
+          value={this.state.password}
+          onChange={this.handlePasswordChange}
         />
-
-        <button type="submit" data-testid="submit" onClick={this.handleClick}>
+        <button data-testid="submit" onClick={this.handleSubmit}>
           Submit
         </button>
-      </div>
+      </>
     );
   }
 }
