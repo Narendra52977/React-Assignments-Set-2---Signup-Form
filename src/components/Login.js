@@ -1,29 +1,34 @@
 import React, { Component, useState } from "react";
 import "../styles/App.css";
-const Login = () => {
-  const [input, setInput] = useState({
-    name: "",
-    email: "",
-    gender: "male",
-    phoneno: "",
-    pwd: ""
-  });
+export default class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      email: "",
+      gender: "male",
+      phoneno: "",
+      pwd: "",
+      Errormsg: ""
+    };
+  }
 
-  const [Errormsg, setErrormsg] = useState("");
-  const handleChange = (event) => {
-    let inputCopy = { ...input };
-    inputCopy[event.target.name] = event.target.value;
-    setInput(inputCopy);
+  handleChange = (event) => {
+    let stateCopy = { ...this.state };
+
+    stateCopy[event.target.name] = event.target.value;
+    this.setState(stateCopy);
   };
-  const handleClick = () => {
-    let name = input.name;
-    let email = input.email;
-    let gender = input.gender;
-    let phoneno = input.phoneno;
-    let pwd = input.pwd;
-    console.log(name, email, gender, phoneno, pwd);
+  handleClick = () => {
+    console.log(this.state);
+    let name = this.state.name;
+    let email = this.state.email;
+    let gender = this.state.gender;
+    let phoneno = this.state.phoneno;
+    let pwd = this.state.pwd;
+    //console.log(name, email, gender, phoneno, pwd);
     if (!name || !email || !gender || !phoneno || !pwd) {
-      setErrormsg("All fields are mandatory");
+      this.setState({ Errormsg: "All fields are mandatory" });
       return;
     }
     let cnt1 = 0;
@@ -43,60 +48,71 @@ const Login = () => {
     }
 
     if (!cnt1 || !cnt2) {
-      setErrormsg("Name is not alphanumeric");
+      this.setState({ Errormsg: "Name is not alphanumeric" });
       return;
     }
-    if (email.indexOf("@") < 1) {
-      setErrormsg("Email must contain @");
+    if (this.state.email.indexOf("@") < 1) {
+      this.setState({ Errormsg: "Email must contain @" });
       return;
     }
-    if (gender !== "male" && gender !== "female" && gender !== "other") {
-      setErrormsg("Please identify as male, female or others");
+    if (
+      this.state.gender !== "male" &&
+      this.state.gender !== "female" &&
+      this.state.gender !== "other"
+    ) {
+      this.setState({ Errormsg: "Please identify as male, female or others" });
       return;
     }
     let pattern = /^[0-9]+$/;
-    if (!phoneno.match(pattern)) {
-      setErrormsg("Phone Number must contain only numbers");
+    if (!this.state.phoneno.match(pattern)) {
+      this.setState({ Errormsg: "Phone Number must contain only numbers" });
       return;
     }
-    if (pwd.length < 6) {
-      setErrormsg("Password must contain atleast 6 letters");
+    if (this.state.pwd.length < 6) {
+      this.setState({ Errormsg: "Password must contain atleast 6 letters" });
       return;
     }
 
-    setErrormsg("Hello " + email.substring(0, email.indexOf("@")));
+    this.setState({
+      Errormsg: "Hello " + email.substring(0, email.indexOf("@"))
+    });
   };
-  return (
-    <div>
-      <div>{Errormsg}</div>
-      <label>Name:</label>
-      <input data-testid="name" name="name" onChange={handleChange} />
-      <label>email:</label>
-      <input data-testid="email" name="email" onChange={handleChange} />
+  render() {
+    return (
+      <div>
+        <div>{this.state.Errormsg}</div>
+        <label>Name:</label>
+        <input data-testid="name" name="name" onChange={this.handleChange} />
+        <label>email:</label>
+        <input data-testid="email" name="email" onChange={this.handleChange} />
 
-      <label>gender:</label>
-      <input
-        data-testid="gender"
-        name="gender"
-        value={input.gender}
-        onChange={handleChange}
-      />
+        <label>gender:</label>
+        <input
+          data-testid="gender"
+          name="gender"
+          value={this.state.gender}
+          onChange={this.handleChange}
+        />
 
-      <label>phoneno:</label>
-      <input data-testid="phoneNumber" name="phoneno" onChange={handleChange} />
+        <label>phoneno:</label>
+        <input
+          data-testid="phoneNumber"
+          name="phoneno"
+          onChange={this.handleChange}
+        />
 
-      <label>password:</label>
-      <input
-        data-testid="password"
-        type="password"
-        name="pwd"
-        onChange={handleChange}
-      />
+        <label>password:</label>
+        <input
+          data-testid="password"
+          type="password"
+          name="pwd"
+          onChange={this.handleChange}
+        />
 
-      <button type="submit" data-testid="submit" onClick={handleClick}>
-        Submit
-      </button>
-    </div>
-  );
-};
-export default Login;
+        <button type="submit" data-testid="submit" onClick={this.handleClick}>
+          Submit
+        </button>
+      </div>
+    );
+  }
+}
