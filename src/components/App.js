@@ -65,7 +65,7 @@ const App = () => {
       return;
     }
 
-    setErrormsg("Hello " + email.split("@")[0]);
+    setErrormsg("Hello " + email.substring(0,email.indexOf("@")));
   };
   return (
     <div id="main">
